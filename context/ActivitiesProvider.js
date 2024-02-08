@@ -21,3 +21,10 @@ export default function ActivitiesProvider({ children }) {
   )
 }
 
+
+// Note:
+// any function (or value) that I include in the value of the ActivitiesContext.Provider 
+// within the ActivitiesProvider component can be accessed by 
+// any of the App component's child components, 
+// assuming I have wrapped the entire application (or the relevant part of it) with the ActivitiesProvider. 
+
