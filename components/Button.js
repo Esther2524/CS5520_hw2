@@ -19,13 +19,13 @@ export default function Button({ onPress, title, disabled, textColor }) {
 }
 
 const styles = StyleSheet.create({
-    button: {
-        alignItems: 'center',
-        margin: 20,
-    },
     text: {
-        fontSize: 18,
+        fontSize: 16,
         textAlign: 'center',
         fontWeight: 'bold',
     },
+    button: {
+        marginRight: 10,
+        // backgroundColor: 'yellow',
+    }
 })
