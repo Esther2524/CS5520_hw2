@@ -5,10 +5,11 @@ import { AntDesign } from '@expo/vector-icons';
 import AllActivities from '../screens/AllActivities';
 import SpecialActivities from '../screens/SpecialActivities';
 import Colors from '../Colors';
+import Button from './Button';
 
 const Tab = createBottomTabNavigator();
 
-export default function ActivityTab() {
+export default function ActivityTab({ navigation }) {
   // a function for configuring screen options
   // each screen in the navigator stack or tab navigator has a route object 
   // that includes details like the name of the route and parameters passed to it.
@@ -16,7 +17,7 @@ export default function ActivityTab() {
     tabBarIcon: ({ focused, color, size }) => {
       let iconName;
       if (route.name === 'AllActivities') {
-        iconName = focused ? 'appstore1' : 'appstore-o'; 
+        iconName = focused ? 'appstore1' : 'appstore-o';
       } else if (route.name === 'SpecialActivities') {
         iconName = focused ? 'star' : 'staro';
       }
@@ -24,12 +25,22 @@ export default function ActivityTab() {
     },
 
     tabBarLabelPosition: 'below-icon', // put the label below the icon
-    tabBarActiveTintColor: Colors.activeTab, 
+    tabBarActiveTintColor: Colors.activeTab,
     tabBarInactiveTintColor: Colors.inactiveTab,
     tabBarStyle: { backgroundColor: Colors.headerBackground },
 
     headerStyle: { backgroundColor: Colors.headerBackground }, // Set the background color for all headers
-    headerTintColor: Colors.header, // Optional: Set the color of the header title and icons
+    headerTintColor: Colors.header,
+
+    // add a universal headerRight button for both tabs
+    headerRight: () => (
+      <Button
+        onPress={() => navigation.navigate('AddActivities')} // this will match the name in the Stack.Navigator
+        title="Add"
+        disabled={false}
+        textColor={Colors.addButton}
+      />
+    ),
   });
 
   return (
@@ -42,7 +53,7 @@ export default function ActivityTab() {
       <Tab.Screen
         name="SpecialActivities"
         component={SpecialActivities}
-        options={{ headerTitle: 'Special Activities', tabBarLabel: 'Special Activities'}} />
+        options={{ headerTitle: 'Special Activities', tabBarLabel: 'Special Activities' }} />
 
     </Tab.Navigator>
   );
