@@ -1,12 +1,17 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, View } from 'react-native';
+import React from 'react';
+import ActivitiesList from '../components/ActivitiesList';
 
 export default function SpecialActivities() {
-  return (
-    <View>
-      <Text>SpecialActivities</Text>
-    </View>
-  )
+    return (
+        <View style={styles.container}>
+            <ActivitiesList showSpecialOnly={true} />
+        </View>
+    )
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    container: {
+        flex: 1
+    }
+})
