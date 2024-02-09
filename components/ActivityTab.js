@@ -1,4 +1,4 @@
-import { StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AntDesign } from '@expo/vector-icons';
@@ -33,9 +33,12 @@ export default function ActivityTab({ navigation }) {
     headerTintColor: Colors.header,
 
     // add a universal headerRight button for both tabs
+    // ensure all activities added from the "Special Activities" screen are marked as special
     headerRight: () => (
       <Button
-        onPress={() => navigation.navigate('AddActivities')} // this will match the name in the Stack.Navigator
+        onPress={() => navigation.navigate('AddActivities',
+         {isSpecial: route.name === 'SpecialActivities',}
+        )} // the second argument is 'params', which allows us to pass additional data to the screen we're navigating to
         title="Add"
         disabled={false}
         textColor={Colors.addButton}
