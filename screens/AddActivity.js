@@ -70,7 +70,7 @@ export default function AddActivity({ navigation, route }) {
       });
     } else {
       // use the calculated isSpecial value for activities from AllActivities screens
-      const isSpecial = (type === 'Running' || type === 'Weight Training') && parseInt(duration, 10) > 60;
+      const isSpecial = (type === 'Running' || type === 'Weights') && parseInt(duration, 10) > 60;
       addActivity({
         type,
         duration: parseInt(duration, 10),
