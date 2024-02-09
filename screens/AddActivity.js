@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, Platform, Alert } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Platform, Alert, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { useState, useContext } from 'react';
 import DropdownPicker from 'react-native-dropdown-picker';
@@ -55,6 +55,8 @@ export default function AddActivity({ navigation, route }) {
     return true;
   }
 
+  console.log(formatDate(date));
+
 
   function handleAddActivity() {
     if (!validateInput(type, duration, date)) return;
@@ -96,20 +98,40 @@ export default function AddActivity({ navigation, route }) {
    * when the user focuses on the related input (triggering handleFocus), showDatePicker becomes true, displaying the picker.
    * Once the user selects a date, onChangeDate updates date and sets showDatePicker to false, hiding the picker.
   */
-  function handleFocus() {
-    setShowDatePicker(true);
-    if (date === null) {
-      setDate(new Date()); // temporarily set to the current date when first opened
-    }
-  };
+  // function handlePress() {
+  //   setShowDatePicker(true);
+  //   if (date === null) {
+  //     setDate(new Date());
+  //   }
+  //   if (formatDate(selectedDate) === formatDate(date)) {
+  //     setShowDatePicker(false);
+  //   }
+  // };
 
-  // hide the picker after selection
-  function onChangeDate(event, selectedDate) {
-    setShowDatePicker(false); // hide the picker
-    if (selectedDate) {
-      setDate(selectedDate); // update the date only if a new date is selected
+  function handlePress() {
+    if (showDatePicker) {
+      // If the picker is already shown, hide it
+      setShowDatePicker(false);
+    } else {
+      setShowDatePicker(true);
+      if (date === null) {
+        setDate(new Date()); // Initialize with the current date if not already set
+      }
     }
   }
+
+
+
+  // hide the picker after selection
+  // date pickers do not consider selecting the same date as a change event, 
+  // thus not triggering the onChange or equivalent event handler if the date hasn't changed from its previous value.
+  function onChangeDate(event, selectedDate) {
+    setShowDatePicker(false); // Always hide the picker after a selection
+    if (selectedDate) {
+      setDate(selectedDate); // Update the state with the new date
+    }
+  }
+
 
 
   // format date to a readable string year-month-day
@@ -121,8 +143,6 @@ export default function AddActivity({ navigation, route }) {
     const year = date.toLocaleString('en-US', { year: 'numeric' });
     return `${weekday} ${month} ${day} ${year}`;
   }
-
-
 
 
 
@@ -159,16 +179,21 @@ export default function AddActivity({ navigation, route }) {
 
       <View style={styles.dateContainer}>
         <Text style={styles.text}>Date *</Text>
-        <TextInput
-          style={styles.textInput}
-          value={formatDate(date) || ''} // display formatted date or empty if null (first go to this screen)
-          onFocus={handleFocus}
-        />
+        <TouchableOpacity onPressIn={handlePress}>
+          <View>
+            <TextInput
+              style={styles.textInput}
+              value={formatDate(date) || ''} // display formatted date or empty if null (first go to this screen)
+              editable={false} // Prevent keyboard from showing
+              pointerEvents="none" // ensure TextInput does not capture the press event
+            />
+          </View>
+        </TouchableOpacity>
         {
           showDatePicker && <DateTimePicker
             style={styles.datePicker}
             // DateTimePicker requires a valid date for its value prop at all times, but I want the picker not to show a date until the user has chosen one
-            value={date || new Date()} // so I use current date as fallback if date is null
+            value={date || new Date()}
             mode='date'
             display='inline'
             onChange={onChangeDate}
@@ -176,21 +201,22 @@ export default function AddActivity({ navigation, route }) {
         }
       </View>
 
-
-      <View style={styles.buttonContainer}>
-        <Button
-          onPress={handleCancel}
-          title='Cancel'
-          disabled={false}
-          textColor={Colors.cancelButton}
-        />
-        <Button
-          onPress={handleAddActivity}
-          title='Save'
-          disabled={false}
-          textColor={Colors.saveButton}
-        />
-      </View>
+      {!showDatePicker && (
+        <View style={styles.buttonContainer}>
+          <Button
+            onPress={handleCancel}
+            title='Cancel'
+            disabled={false}
+            textColor={Colors.cancelButton}
+          />
+          <Button
+            onPress={handleAddActivity}
+            title='Save'
+            disabled={false}
+            textColor={Colors.saveButton}
+          />
+        </View>
+      )}
 
 
     </View>
