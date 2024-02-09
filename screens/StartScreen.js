@@ -82,7 +82,8 @@ export default function StartScreen({ navigation }) {
           onPress={handleReset}
           disabled={false}
           textColor={Colors.resetButton} />
-        <Button style={styles.button}
+        <Button
+          style={styles.button}
           title='Start'
           onPress={handleStart}
           disabled={!email && !phoneNumber}
@@ -104,24 +105,23 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     width: '95%',
     height: 80,
-    // backgroundColor: 'yellow',
   },
   label: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
     color: Colors.text,
     textAlign: 'left',
     marginBottom: 5,
   },
   input: {
-    fontSize: 20,
+    fontSize: 18,
     color: Colors.text,
     width: '100%',
     height: 50,
     borderWidth: 2,
     borderColor: Colors.border,
+    borderRadius: 10,
     padding: 8,
-    // backgroundColor: 'red',
   },
   error: {
     color: Colors.errorMessage,
