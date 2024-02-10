@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AntDesign } from '@expo/vector-icons';
 import AllActivities from '../screens/AllActivities';
 import SpecialActivities from '../screens/SpecialActivities';
-import Colors from '../Colors';
+import { Colors } from '../Theme';
 import Button from './Button';
 
 const Tab = createBottomTabNavigator();

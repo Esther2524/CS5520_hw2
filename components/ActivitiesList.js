@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, FlatList } from 'react-native';
 import React from 'react';
 import { ActivitiesContext } from '../context/ActivitiesProvider';
 import { useContext } from 'react';
-import Colors from '../Colors';
+import { Colors } from '../Theme';
 import { AntDesign } from '@expo/vector-icons';
 
 export default function ActivitiesList({ showSpecialOnly }) {
@@ -15,13 +15,20 @@ export default function ActivitiesList({ showSpecialOnly }) {
   function renderActivity({ item }) {
     return (
       <View style={styles.activityContainer}>
-        <Text style={styles.typeText}>{item.type}</Text>
-        {item.isSpecial && <AntDesign style={styles.icon} name={'star'} size={20} color={Colors.activeTab} />}
-        <View style={styles.textContainer}>
-          <Text style={styles.dateText}>{item.date}</Text>
+        <View style={styles.typeContainer}>
+          <Text style={styles.typeText}>{item.type}</Text>
         </View>
-        <View style={styles.textContainer}>
-          <Text style={styles.durationText}>{item.duration} min</Text>
+        <View style={styles.iconAndTextContainer}>
+        {item.isSpecial ? (
+          <AntDesign style={styles.icon} name={'star'} size={22} color={Colors.activeTab} />
+        ) : (
+          // placeholder view when there is no icon
+          <View style={[styles.icon, { width: 22, height: 22 }]} />
+        )}
+          <View style={styles.textContainer}>
+            <Text style={styles.dateText}>{item.date}</Text>
+            <Text style={styles.durationText}>{item.duration} min</Text>
+          </View>
         </View>
       </View>
     )
@@ -56,21 +63,34 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginRight: 20,
     marginLeft: 20,
-    padding: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
     borderBottomWidth: 1,
     flexDirection: 'row',
+    // justifyContent: 'space-around',
     justifyContent: 'space-between',
+    alignItems: 'center',
     backgroundColor: Colors.itemBackground,
     borderRadius: 10,
   },
   typeText: {
     fontSize: 16,
     fontWeight: 'bold',
-    padding: 5,
     color: 'white',
+    marginLeft: 5,
+    marginRight: 5,
+  },
+  typeContainer: {
+    marginLeft: 5,
+  },
+  iconAndTextContainer: {
+    flexDirection: 'row',
+    marginRight: 10,
   },
   textContainer: {
-
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
   },
   durationText: {
     fontSize: 16,
@@ -89,9 +109,11 @@ const styles = StyleSheet.create({
     color: Colors.text,
     borderRadius: 5,
     overflow: 'hidden',
+    marginRight: 8,
   },
   icon: {
     padding: 5,
+    marginRight: 5,
   }
 
 })
