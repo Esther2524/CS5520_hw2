@@ -55,7 +55,6 @@ export default function AddActivity({ navigation, route }) {
     return true;
   }
 
-  console.log(formatDate(date));
 
 
   function handleAddActivity() {
@@ -261,7 +260,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    marginTop: 50,
+    marginTop: 30,
   },
 
 })
