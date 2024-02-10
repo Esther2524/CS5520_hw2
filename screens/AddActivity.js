@@ -4,7 +4,7 @@ import { useState, useContext } from 'react';
 import DropdownPicker from 'react-native-dropdown-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { ActivitiesContext } from '../context/ActivitiesProvider';
-import Colors from '../Colors';
+import { Colors } from '../Theme';
 import Button from '../components/Button';
 
 
@@ -175,7 +175,7 @@ export default function AddActivity({ navigation, route }) {
               <TextInput
                 style={styles.textInput}
                 value={formatDate(date) || ''} // display formatted date or empty if null (first go to this screen)
-                editable={false} // Prevent keyboard from showing
+                // editable={true} // Prevent keyboard from showing
                 pointerEvents="none" // ensure TextInput does not capture the press event
               />
             </View>
