@@ -7,7 +7,6 @@ import { ActivitiesContext } from '../context/ActivitiesProvider';
 import { Colors } from '../Theme';
 import Button from '../components/Button';
 
-
 const items = [
   { label: 'Walking', value: 'Walking' },
   { label: 'Running', value: 'Running' },
@@ -99,8 +98,6 @@ export default function AddActivity({ navigation, route }) {
    * when the user focuses on the related input (triggering handleFocus), showDatePicker becomes true, displaying the picker.
    * Once the user selects a date, onChangeDate updates date and sets showDatePicker to false, hiding the picker.
   */
-
-
   function handlePress() {
     if (showDatePicker) {
       // If the picker is already shown, hide it
@@ -156,7 +153,6 @@ export default function AddActivity({ navigation, route }) {
           labelStyle={styles.labelStyle}
         />
 
-
         <View style={styles.textInputContainer}>
           <Text style={styles.text}>Duration(min) *</Text>
           <TextInput
@@ -167,19 +163,13 @@ export default function AddActivity({ navigation, route }) {
           />
         </View>
 
-
         <View style={styles.dateContainer}>
           <Text style={styles.text}>Date *</Text>
-          <TouchableOpacity onPressIn={handlePress}>
-            <View>
-              <TextInput
-                style={styles.textInput}
-                value={formatDate(date) || ''} // display formatted date or empty if null (first go to this screen)
-                // editable={true} // Prevent keyboard from showing
-                pointerEvents="none" // ensure TextInput does not capture the press event
-              />
-            </View>
-          </TouchableOpacity>
+          <TextInput
+            onPressIn={handlePress}
+            style={styles.textInput}
+            value={formatDate(date) || ''} // display formatted date or empty if null (first go to this screen)
+          />
           {
             showDatePicker && <DateTimePicker
               style={styles.datePicker}
