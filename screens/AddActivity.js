@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, Platform, Alert, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Platform, Alert, TouchableOpacity, ScrollView } from 'react-native';
 import React from 'react';
 import { useState, useContext } from 'react';
 import DropdownPicker from 'react-native-dropdown-picker';
@@ -6,6 +6,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { ActivitiesContext } from '../context/ActivitiesProvider';
 import Colors from '../Colors';
 import Button from '../components/Button';
+
 
 const items = [
   { label: 'Walking', value: 'Walking' },
@@ -98,15 +99,7 @@ export default function AddActivity({ navigation, route }) {
    * when the user focuses on the related input (triggering handleFocus), showDatePicker becomes true, displaying the picker.
    * Once the user selects a date, onChangeDate updates date and sets showDatePicker to false, hiding the picker.
   */
-  // function handlePress() {
-  //   setShowDatePicker(true);
-  //   if (date === null) {
-  //     setDate(new Date());
-  //   }
-  //   if (formatDate(selectedDate) === formatDate(date)) {
-  //     setShowDatePicker(false);
-  //   }
-  // };
+
 
   function handlePress() {
     if (showDatePicker) {
@@ -119,7 +112,6 @@ export default function AddActivity({ navigation, route }) {
       }
     }
   }
-
 
 
   // hide the picker after selection
@@ -149,8 +141,10 @@ export default function AddActivity({ navigation, route }) {
   return (
     <View style={styles.container}>
 
-      <View style={styles.dropdownContainer}>
-        <Text style={styles.text}>Activity *</Text>
+      <View style={styles.view}>
+        {/* not sure why, but if I put text and DropdownPicker into a dropdownContainer,
+      then the dropdown is not scrollable on Android */}
+        <Text style={styles.textActivity}>Activity *</Text>
         <DropdownPicker
           open={open}
           value={type} // the currently selected value (the type of activity)
@@ -159,66 +153,62 @@ export default function AddActivity({ navigation, route }) {
           setValue={setType} // function to update the selected value
           placeholder="Select an Activity"
           style={styles.dropdown}
-          labelStyle={{
-            fontSize: 16,
-            color: Colors.text,
-          }}
+          labelStyle={styles.labelStyle}
         />
-      </View>
-
-      <View style={styles.textInputContainer}>
-        <Text style={styles.text}>Duration(min) *</Text>
-        <TextInput
-          style={styles.textInput}
-          value={duration}
-          onChangeText={setDuration}
-          keyboardType='numeric'
-        />
-      </View>
 
 
-      <View style={styles.dateContainer}>
-        <Text style={styles.text}>Date *</Text>
-        <TouchableOpacity onPressIn={handlePress}>
-          <View>
-            <TextInput
-              style={styles.textInput}
-              value={formatDate(date) || ''} // display formatted date or empty if null (first go to this screen)
-              editable={false} // Prevent keyboard from showing
-              pointerEvents="none" // ensure TextInput does not capture the press event
-            />
-          </View>
-        </TouchableOpacity>
-        {
-          showDatePicker && <DateTimePicker
-            style={styles.datePicker}
-            // DateTimePicker requires a valid date for its value prop at all times, but I want the picker not to show a date until the user has chosen one
-            value={date || new Date()}
-            mode='date'
-            display='inline'
-            onChange={onChangeDate}
-          />
-        }
-      </View>
-
-      {!showDatePicker && (
-        <View style={styles.buttonContainer}>
-          <Button
-            onPress={handleCancel}
-            title='Cancel'
-            disabled={false}
-            textColor={Colors.cancelButton}
-          />
-          <Button
-            onPress={handleAddActivity}
-            title='Save'
-            disabled={false}
-            textColor={Colors.saveButton}
+        <View style={styles.textInputContainer}>
+          <Text style={styles.text}>Duration(min) *</Text>
+          <TextInput
+            style={styles.textInput}
+            value={duration}
+            onChangeText={setDuration}
+            keyboardType='numeric'
           />
         </View>
-      )}
 
 
+        <View style={styles.dateContainer}>
+          <Text style={styles.text}>Date *</Text>
+          <TouchableOpacity onPressIn={handlePress}>
+            <View>
+              <TextInput
+                style={styles.textInput}
+                value={formatDate(date) || ''} // display formatted date or empty if null (first go to this screen)
+                editable={false} // Prevent keyboard from showing
+                pointerEvents="none" // ensure TextInput does not capture the press event
+              />
+            </View>
+          </TouchableOpacity>
+          {
+            showDatePicker && <DateTimePicker
+              style={styles.datePicker}
+              // DateTimePicker requires a valid date for its value prop at all times, but I want the picker not to show a date until the user has chosen one
+              value={date || new Date()}
+              mode='date'
+              display='inline'
+              onChange={onChangeDate}
+            />
+          }
+        </View>
+
+        {!showDatePicker && (
+          <View style={styles.buttonContainer}>
+            <Button
+              onPress={handleCancel}
+              title='Cancel'
+              disabled={false}
+              textColor={Colors.cancelButton}
+            />
+            <Button
+              onPress={handleAddActivity}
+              title='Save'
+              disabled={false}
+              textColor={Colors.saveButton}
+            />
+          </View>
+        )}
+      </View>
     </View>
   )
 }
@@ -227,7 +217,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.screen,
-    alignItems: 'center',
+    // alignItems: 'center',
+  },
+  view: {
+    marginLeft: 20,
+    marginRight: 20,
   },
   text: {
     marginBottom: 5,
@@ -235,22 +229,31 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: Colors.addText,
   },
-  dropdownContainer: {
-    width: '90%',
-    marginBottom: 30,
+  // dropdownContainer: {
+  //   // flex: 1, // add this, then the dropdown can be scrollable on Android, why??
+  //   width: '90%',
+  //   marginTop: 50,
+  //   marginBottom: 30,
+  //   zIndex: 1000, // Increase zIndex, ensure this container is above other screen elements
+  // },
+  textActivity: {
     marginTop: 50,
-    zIndex: 1000, // ensure this container is above other screen elements
-    // backgroundColor: 'yellow',
+    marginBottom: 5,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: Colors.addText,
+    textAlign: 'left',
   },
   dropdown: {
     backgroundColor: Colors.dropdownBackground,
-    height: 50,
-    zIndex: 1000, // DropdownPicker itself needs higher stacking context
+    marginBottom: 20,
+  },
+  labelStyle: {
+    fontSize: 16,
+    color: Colors.text,
   },
   textInputContainer: {
-    marginBottom: 30,
-    width: '90%',
-    // backgroundColor: 'yellow',
+    marginBottom: 20,
   },
   textInput: {
     borderWidth: 1,
@@ -263,13 +266,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.dropdownBackground,
   },
   dateContainer: {
-    width: '90%',
     marginBottom: 30,
   },
   buttonContainer: {
     flexDirection: 'row',
-    // backgroundColor: 'yellow',
-    width: '90%',
     justifyContent: 'space-evenly',
     marginTop: 50,
   },
