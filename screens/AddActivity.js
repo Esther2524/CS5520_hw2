@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, Platform, Alert, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Platform, Alert } from 'react-native';
 import React from 'react';
 import { useState, useContext } from 'react';
 import DropdownPicker from 'react-native-dropdown-picker';
@@ -22,7 +22,7 @@ const items = [
  * then I'll have access to the route object containing the navigation parameters, 
  * especially the isSpecial parameter that I want to use in the handleAddActivity function.
 */
-export default function AddActivity({ navigation, route }) {
+export default function AddActivity({ navigation }) {
   // open is a boolean state that controls whether the dropdown is open or closed.
   const [open, setOpen] = useState(false);
   // set date picker
@@ -59,28 +59,15 @@ export default function AddActivity({ navigation, route }) {
 
   function handleAddActivity() {
     if (!validateInput(type, duration, date)) return;
-
-    // 1. if the activity is being added from the SpecialActivities screen, mark it as special
-    if (route && route.params && route.params.isSpecial) {
-      addActivity({
-        type,
-        duration: parseInt(duration, 10),
-        date: formatDate(date),
-        id: Date.now().toString(),
-        isSpecial: true, // explicitly set isSpecial to true for activities from SpecialActivities
-      });
-    } else {
-      // use the calculated isSpecial value for activities from AllActivities screens
-      const isSpecial = (type === 'Running' || type === 'Weights') && parseInt(duration, 10) > 60;
-      addActivity({
-        type,
-        duration: parseInt(duration, 10),
-        date: formatDate(date),
-        id: Date.now().toString(),
-        isSpecial,
-      });
-    }
-
+    // use the calculated isSpecial value for activities from AllActivities screens
+    const isSpecial = (type === 'Running' || type === 'Weights') && parseInt(duration, 10) > 60;
+    addActivity({
+      type,
+      duration: parseInt(duration, 10),
+      date: formatDate(date),
+      id: Date.now().toString(),
+      isSpecial,
+    });
     // return to the previous screen after adding
     navigation.goBack();
   };
@@ -138,7 +125,6 @@ export default function AddActivity({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-
       <View style={styles.view}>
         {/* not sure why, but if I put text and DropdownPicker into a dropdownContainer,
       then the dropdown is not scrollable on Android */}
@@ -170,6 +156,8 @@ export default function AddActivity({ navigation, route }) {
             onPressIn={handlePress}
             style={styles.textInput}
             value={formatDate(date) || ''} // display formatted date or empty if null (first go to this screen)
+            // inputMode determines which keyboard to open, and has precedence over keyboardType.
+            inputMode='none'
           />
           {
             showDatePicker && <DateTimePicker
