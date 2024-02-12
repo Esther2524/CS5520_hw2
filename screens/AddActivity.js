@@ -17,11 +17,7 @@ const items = [
   { label: 'Hiking', value: 'Hiking' }
 ];
 
-/*
- * adding route as a parameter to the AddActivity is important
- * then I'll have access to the route object containing the navigation parameters, 
- * especially the isSpecial parameter that I want to use in the handleAddActivity function.
-*/
+
 export default function AddActivity({ navigation }) {
   // open is a boolean state that controls whether the dropdown is open or closed.
   const [open, setOpen] = useState(false);
@@ -81,8 +77,10 @@ export default function AddActivity({ navigation }) {
 
   /*
    * user interaction flow for date picker:
-   * when the user focuses on the related input (triggering handleFocus), showDatePicker becomes true, displaying the picker.
+   * when the user clicks the input field (triggering handlePress), showDatePicker becomes true, displaying the picker.
    * Once the user selects a date, onChangeDate updates date and sets showDatePicker to false, hiding the picker.
+   * 
+   * but if the user clicks the same date, the picker won't disappear. to close it, they have to click the input field again.
   */
   function handlePress() {
     if (showDatePicker) {
@@ -97,13 +95,14 @@ export default function AddActivity({ navigation }) {
   }
 
 
-  /* hide the picker after selection
+  /* 
+   * hide the picker after selection:
    * date pickers do not consider selecting the same date as a change event, 
    * thus not triggering the onChange or equivalent event handler 
    * if the date hasn't changed from its previous value.
   */
   function onChangeDate(event, selectedDate) {
-    setShowDatePicker(false); // hide DateTimePicker after selection, not sure if I need this step
+    setShowDatePicker(false); // hide DateTimePicker after selection (only work out when the user chooses a different date)
     if (selectedDate) {
       setDate(selectedDate); // update the state with the new date
     }
@@ -156,7 +155,7 @@ export default function AddActivity({ navigation }) {
             onPressIn={handlePress}
             style={styles.textInput}
             value={formatDate(date) || ''} // display formatted date or empty if null (first go to this screen)
-            // inputMode determines which keyboard to open, and has precedence over keyboardType.
+            // !! inputMode determines which keyboard to open, and has precedence over keyboardType.
             inputMode='none'
           />
           {

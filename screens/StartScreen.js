@@ -3,6 +3,14 @@ import React, { useState } from 'react';
 import { Colors, fontSize, Padding } from '../Theme';
 import Button from '../components/Button';
 
+/*
+ * The StartScreen component consists of two main TextInput fields, 
+ * one for the email address and one for the phone number.
+ * 
+ * Two buttons are provided:
+ * one to reset, and another to submit the data
+ * the 'Start' button is enabled only when input email or phone number fields are valid
+*/
 
 export default function StartScreen({ navigation }) {
 
@@ -12,9 +20,13 @@ export default function StartScreen({ navigation }) {
   const [phoneError, setPhoneError] = useState('');
 
   function validateEmail(email) {
-    return email.includes('@') && email.includes('.');
+    // this regex checks for the basic pattern of a valid email: 
+    // some characters before the '@', at least one character between '@' and '.',
+    // and at least two characters after the '.' to ensure a valid email address
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    return regex.test(email);
   }
-
+  
   function validatePhoneNumber(phoneNumber) {
     return /^\d{10}$/.test(phoneNumber);
   }
