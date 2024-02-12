@@ -1,10 +1,15 @@
+import { StyleSheet } from 'react-native';
 import ActivitiesProvider from './context/ActivitiesProvider';
 import StackNavigator from './navigation/StackNavigator';
-// App.js will set up the navigation structure, 
-// creating a stack navigator that includes the start screen and a bottom tab navigator for the activity screens.
 
-// the navigation logic is now encapsulated within the StackNavigator 
+/*
+ * Main entry point of the React Native application.
 
+ * App.js wraps the entire app in the ActivitiesProvider from the context API,
+ * providing global state management for activities data throughout the app.
+ * 
+ * It includes the StackNavigator component for handling the navigation logic.
+*/
 export default function App() {
 
   return (
@@ -13,3 +18,5 @@ export default function App() {
     </ActivitiesProvider>
   );
 }
+
+const styles = StyleSheet.create({})
