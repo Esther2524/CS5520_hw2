@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, TextInput } from 'react-native';
 import React, { useState } from 'react';
-import { Colors } from '../Theme';
+import { Colors, fontSize, Padding } from '../Theme';
 import Button from '../components/Button';
 
 
@@ -70,7 +70,7 @@ export default function StartScreen({ navigation }) {
           value={phoneNumber}
           onChangeText={setPhoneNumber}
           keyboardType="numeric"
-          placeholder="e.g. 1357924689"
+          placeholder="e.g. 0123456789"
         />
         {phoneError ? <Text style={styles.error}>{phoneError}</Text> : null}
       </View>
@@ -107,25 +107,25 @@ const styles = StyleSheet.create({
     height: 80,
   },
   label: {
-    fontSize: 18,
+    fontSize: fontSize.inputText,
     fontWeight: 'bold',
     color: Colors.text,
     textAlign: 'left',
     marginBottom: 5,
   },
   input: {
-    fontSize: 18,
+    fontSize: fontSize.inputText,
     color: Colors.text,
     width: '100%',
     height: 50,
     borderWidth: 2,
     borderColor: Colors.border,
     borderRadius: 10,
-    padding: 8,
+    padding: Padding.inputPadding,
   },
   error: {
     color: Colors.errorMessage,
-    fontSize: 16,
+    fontSize: fontSize.errorText,
   },
   buttonContainer: {
     flexDirection: 'row', // align buttons in a row
