@@ -4,7 +4,7 @@ import { useState, useContext } from 'react';
 import DropdownPicker from 'react-native-dropdown-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { ActivitiesContext } from '../context/ActivitiesProvider';
-import { Colors } from '../Theme';
+import { Colors, fontSize, Padding } from '../Theme';
 import Button from '../components/Button';
 
 const items = [
@@ -110,13 +110,15 @@ export default function AddActivity({ navigation, route }) {
   }
 
 
-  // hide the picker after selection
-  // date pickers do not consider selecting the same date as a change event, 
-  // thus not triggering the onChange or equivalent event handler if the date hasn't changed from its previous value.
+  /* hide the picker after selection
+   * date pickers do not consider selecting the same date as a change event, 
+   * thus not triggering the onChange or equivalent event handler 
+   * if the date hasn't changed from its previous value.
+  */
   function onChangeDate(event, selectedDate) {
-    setShowDatePicker(false); // Always hide the picker after a selection
+    setShowDatePicker(false); // hide DateTimePicker after selection, not sure if I need this step
     if (selectedDate) {
-      setDate(selectedDate); // Update the state with the new date
+      setDate(selectedDate); // update the state with the new date
     }
   }
 
@@ -171,7 +173,6 @@ export default function AddActivity({ navigation, route }) {
           />
           {
             showDatePicker && <DateTimePicker
-              style={styles.datePicker}
               // DateTimePicker requires a valid date for its value prop at all times, but I want the picker not to show a date until the user has chosen one
               value={date || new Date()}
               mode='date'
@@ -206,7 +207,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.screen,
-    // alignItems: 'center',
   },
   view: {
     marginLeft: 20,
@@ -214,21 +214,14 @@ const styles = StyleSheet.create({
   },
   text: {
     marginBottom: 5,
-    fontSize: 16,
+    fontSize: fontSize.normalText,
     fontWeight: 'bold',
     color: Colors.addText,
   },
-  // dropdownContainer: {
-  //   // flex: 1, // add this, then the dropdown can be scrollable on Android, why??
-  //   width: '90%',
-  //   marginTop: 50,
-  //   marginBottom: 30,
-  //   zIndex: 1000, // Increase zIndex, ensure this container is above other screen elements
-  // },
   textActivity: {
     marginTop: 50,
     marginBottom: 5,
-    fontSize: 16,
+    fontSize: fontSize.normalText,
     fontWeight: 'bold',
     color: Colors.addText,
     textAlign: 'left',
@@ -238,7 +231,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   labelStyle: {
-    fontSize: 16,
+    fontSize: fontSize.labelText,
     color: Colors.text,
   },
   textInputContainer: {
@@ -249,8 +242,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: Colors.text,
     height: 50,
-    padding: 10,
-    fontSize: 16,
+    padding: Padding.textInputPadding,
+    fontSize: fontSize.normalText,
     color: Colors.text,
     backgroundColor: Colors.dropdownBackground,
   },
