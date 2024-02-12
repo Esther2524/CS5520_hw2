@@ -19,13 +19,23 @@ export const Colors = {
     addText: '#294B29',
     itemBackground: '#436850',
     itemTexBackground: '#FDF0D1',
+    itemName: 'white',
 };
 
 export const fontSize = {
     normalText: 16,
+    inputText: 18,
+    errorText: 16,
+    buttonText: 17,
+    activityText: 16,
+    labelText: 16,
 };
 
 export const Padding = {
     itemPadding: 20,
+    activityPadding: 5,
+    containerPadding: 10,
+    inputPadding: 8,
+    textInputPadding: 10,
 }
 
