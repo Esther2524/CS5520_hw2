@@ -9,7 +9,7 @@ import Button from '../components/Button';
  * 
  * Two buttons are provided:
  * one to reset, and another to submit the data
- * the 'Start' button is enabled only when input email or phone number fields are valid
+ * the 'Start' button is enabled when user types something in one of the TextInputs
 */
 
 export default function StartScreen({ navigation }) {
