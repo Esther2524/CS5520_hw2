@@ -4,6 +4,14 @@ import { ActivitiesContext } from '../context/ActivitiesProvider';
 import { useContext } from 'react';
 import Activity from './Activity';
 
+/*
+ * this file renders a list of activities within the app
+ * and use the useContext hook to access activities from the ActivitiesContext.
+ * 
+ * it optionally filter activities to show only special ones based on the `showSpecialOnly` prop.
+ * 
+*/
+
 export default function ActivitiesList({ showSpecialOnly }) {
 
   const { activities } = useContext(ActivitiesContext);

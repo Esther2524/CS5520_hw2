@@ -3,6 +3,11 @@ import React from 'react';
 import { Colors, fontSize, Padding } from '../Theme';
 import { AntDesign } from '@expo/vector-icons';
 
+/*
+ * it renders the visual representation of an individual activity item, 
+ * and receives an activity item as a prop and displays its details, such as type, date, and duration.
+*/
+
 export default function Activity({ item }) {
   return (
     <View style={styles.activityContainer}>
