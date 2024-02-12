@@ -15,7 +15,7 @@ import TabNavigator from './TabNavigator';
 
 const Stack = createNativeStackNavigator();
 
-export default function StackNasvigator() {
+export default function StackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator
