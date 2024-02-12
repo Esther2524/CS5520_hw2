@@ -16,7 +16,7 @@ export default function ActivitiesList({ showSpecialOnly }) {
 
   const { activities } = useContext(ActivitiesContext);
 
-  console.log(activities);
+  // console.log(activities);
 
   // Filter activities based on the `showSpecialOnly` prop and `isSpecial` attribute
   const filteredActivities = showSpecialOnly
