@@ -7,36 +7,45 @@ import AddActivity from '../screens/AddActivity';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TabNavigator from './TabNavigator';
 
+/*
+ * this file define a stack of screens for the app's navigation,
+ * including (1) the StartScreen, (2) a TabNavigator for navigating between activity screens,
+ *  and (3) an AddActivity screen for adding new activities.
+*/
+
 const Stack = createNativeStackNavigator();
 
-// this file sets up the navigation structure, 
-// creating a stack navigator that includes the start screen and a bottom tab navigator for the activity screens.
 export default function StackNasvigator() {
   return (
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            headerStyle: { backgroundColor: Colors.headerBackground }, // global header style
-            headerTintColor: Colors.header,
-            headerTitleAlign: 'center', // center align the header title for Android
-          }}>
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          headerStyle: { backgroundColor: Colors.headerBackground }, // global header style
+          headerTintColor: Colors.header,
+          headerTitleAlign: 'center', // center align the header title for Android
+        }}>
 
-          <Stack.Screen
-            name="Start"
-            component={StartScreen}
-            options={{ headerShown: false }} />
+        <Stack.Screen
+          name="Start"
+          component={StartScreen}
+          options={{ headerShown: false }} />
 
-          <Stack.Screen
-            name="Activities"
-            component={TabNavigator}
-            options={{ headerShown: false }} />
+        <Stack.Screen
+          name="Activities"
+          component={TabNavigator}
+          options={{ headerShown: false }} />
 
-          <Stack.Screen
-            name="AddActivities"
-            component={AddActivity}
-            options={{ headerTitle: "Add Activity" }} />
+        <Stack.Screen
+          name="AddActivities"
+          component={AddActivity}
+          options={{
+            headerTitle: "Add Activity",
+            headerBackTitleVisible: false, // remove the text label next to the back button on iOS
+          }} />
 
-        </Stack.Navigator>
-      </NavigationContainer>
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({})

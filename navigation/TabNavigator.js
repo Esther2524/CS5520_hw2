@@ -7,6 +7,12 @@ import SpecialActivities from '../screens/SpecialActivities';
 import { Colors } from '../Theme';
 import Button from '../components/Button';
 
+/*
+ * this file manages the bottom tab navigation of the app
+ * between different screens within the app (AllActivities and SpecialActivities)
+*/
+
+// set up the tab navigator
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigator({ navigation }) {
@@ -26,21 +32,19 @@ export default function TabNavigator({ navigation }) {
     },
 
     tabBarLabelPosition: 'below-icon', // put the label below the icon
+    // visually represent tabs with active and inactive
     tabBarActiveTintColor: Colors.activeTab,
     tabBarInactiveTintColor: Colors.inactiveTab,
     tabBarStyle: { backgroundColor: Colors.headerBackground },
 
-    headerStyle: { backgroundColor: Colors.headerBackground }, // Set the background color for all headers
+    headerStyle: { backgroundColor: Colors.headerBackground }, // set the background color for all headers
     headerTintColor: Colors.header,
     headerTitleAlign: 'center', // center align the header title for Android
 
     // add a universal headerRight button for both tabs
-    // ensure all activities added from the "Special Activities" screen are marked as special
     headerRight: () => (
       <Button
-        onPress={() => navigation.navigate('AddActivities',
-         {isSpecial: route.name === 'SpecialActivities',}
-        )} // the second argument is 'params', which allows us to pass additional data to the screen we're navigating to
+        onPress={() => navigation.navigate('AddActivities')} 
         title="Add"
         disabled={false}
         textColor={Colors.addButton}
@@ -50,6 +54,7 @@ export default function TabNavigator({ navigation }) {
 
   return (
     <Tab.Navigator screenOptions={screenOptions} >
+
       <Tab.Screen
         name="AllActivities"
         component={AllActivities}
