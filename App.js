@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-import ActivitiesProvider from './context/ActivitiesProvider';
 import StackNavigator from './navigation/StackNavigator';
 
 /*
@@ -13,9 +12,7 @@ import StackNavigator from './navigation/StackNavigator';
 export default function App() {
 
   return (
-    <ActivitiesProvider>
       <StackNavigator />
-    </ActivitiesProvider>
   );
 }
 
