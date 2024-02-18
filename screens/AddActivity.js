@@ -1,11 +1,12 @@
 import { StyleSheet, Text, View, TextInput, Platform, Alert } from 'react-native';
 import React from 'react';
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import DropdownPicker from 'react-native-dropdown-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { ActivitiesContext } from '../context/ActivitiesProvider';
 import { Colors, fontSize, Padding } from '../Theme';
 import Button from '../components/Button';
+import { db } from '../configuration/FirebaseConfig';
+import { collection, addDoc } from 'firebase/firestore';
 
 const items = [
   { label: 'Walking', value: 'Walking' },
@@ -19,6 +20,7 @@ const items = [
 
 
 export default function AddActivity({ navigation }) {
+
   // open is a boolean state that controls whether the dropdown is open or closed.
   const [open, setOpen] = useState(false);
   // set date picker
@@ -27,8 +29,7 @@ export default function AddActivity({ navigation }) {
   const [type, setType] = useState(null);
   const [duration, setDuration] = useState('');
   const [date, setDate] = useState(null);
-  // addActivity is a function defined within my ActivitiesProvider component
-  const { addActivity } = useContext(ActivitiesContext);
+
 
   function validateInput(type, duration, date) {
     let errorMessage = '';
@@ -52,21 +53,33 @@ export default function AddActivity({ navigation }) {
   }
 
 
-
-  function handleAddActivity() {
+  /* 
+   * why use async and await here: 
+   * network requests take time, if we haven't written our data to the Firestore database, 
+   * we shouldn't go back to the previous Screen. 
+   * 
+   * another way to write: const handleAddActivity = async () => {...}
+  */
+  async function handleAddActivity() {
     if (!validateInput(type, duration, date)) return;
-    // use the calculated isSpecial value for activities from AllActivities screens
     const isSpecial = (type === 'Running' || type === 'Weights') && parseInt(duration, 10) > 60;
-    addActivity({
-      type,
-      duration: parseInt(duration, 10),
-      date: formatDate(date),
-      id: Date.now().toString(),
-      isSpecial,
-    });
-    // return to the previous screen after adding
-    navigation.goBack();
+  
+    try {
+      const docRef = await addDoc(collection(db, "Activities"), {
+        type,
+        duration: parseInt(duration, 10),
+        date: formatDate(date),
+        // we don't need to manually generate unique IDs here. Firebase will automatically geneate unique IDs
+        isSpecial,
+      });
+      console.log("Document written with ID: ", docRef.id); // access the auto-generated ID by Firestore
+      navigation.goBack(); // go back to previous screen
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
   };
+
+
 
   // return to the previous screen
   function handleCancel() {
