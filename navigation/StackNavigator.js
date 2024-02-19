@@ -6,6 +6,7 @@ import StartScreen from '../screens/StartScreen';
 import AddActivity from '../screens/AddActivity';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TabNavigator from './TabNavigator';
+import EditActivity from '../screens/EditActivity';
 
 /*
  * this file define a stack of screens for the app's navigation,
@@ -40,6 +41,14 @@ export default function StackNavigator() {
           component={AddActivity}
           options={{
             headerTitle: "Add Activity",
+            headerBackTitleVisible: false, // remove the text label next to the back button on iOS
+          }} />
+
+        <Stack.Screen
+          name="EditActivity"
+          component={EditActivity}
+          options={{
+            headerTitle: "Edit",
             headerBackTitleVisible: false, // remove the text label next to the back button on iOS
           }} />
 
