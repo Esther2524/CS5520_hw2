@@ -9,6 +9,21 @@ import { AntDesign } from '@expo/vector-icons';
 */
 
 export default function Activity({ item }) {
+
+
+  // convert the Firestore timestamp to a JavaScript Date object
+  function formatDate(timestamp) {
+    const date = new Date(timestamp.seconds * 1000); // multiply by 1000 to convert seconds to milliseconds
+    const weekday = date.toLocaleString('en-US', { weekday: 'short' });
+    const month = date.toLocaleString('en-US', { month: 'short' });
+    const day = date.toLocaleString('en-US', { day: 'numeric' });
+    const year = date.toLocaleString('en-US', { year: 'numeric' });
+    return `${weekday} ${month} ${day} ${year}`;
+  }
+
+
+  // console.log(item.date) // date is a Firestore Timestamp
+
   return (
     <View style={styles.activityContainer}>
       <View style={styles.typeContainer}>
@@ -22,7 +37,7 @@ export default function Activity({ item }) {
           <View style={[styles.icon, { width: 22, height: 22 }]} />
         )}
         <View style={styles.textContainer}>
-          <Text style={styles.dateText}>{item.date}</Text>
+          <Text style={styles.dateText}>{formatDate(item.date)}</Text>
           <Text style={styles.durationText}>{item.duration} min</Text>
         </View>
       </View>
