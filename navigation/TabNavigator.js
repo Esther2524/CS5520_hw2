@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AntDesign } from '@expo/vector-icons';
@@ -6,6 +6,7 @@ import AllActivities from '../screens/AllActivities';
 import SpecialActivities from '../screens/SpecialActivities';
 import { Colors } from '../Theme';
 import Button from '../components/Button';
+import PressableButton from '../components/PressableButton';
 
 /*
  * this file manages the bottom tab navigation of the app
@@ -43,12 +44,12 @@ export default function TabNavigator({ navigation }) {
 
     // add a universal headerRight button for both tabs
     headerRight: () => (
-      <Button
-        onPress={() => navigation.navigate('AddActivities')} 
-        title="Add"
-        disabled={false}
-        textColor={Colors.addButton}
-      />
+      <PressableButton
+        onPress={() => navigation.navigate('AddActivities')}
+        customStyle={{ marginRight: 20, }}
+      >
+        <AntDesign name="plus" size={24} color={Colors.addButton} />
+      </PressableButton>
     ),
   });
 
