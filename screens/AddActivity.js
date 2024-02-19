@@ -63,12 +63,12 @@ export default function AddActivity({ navigation }) {
   async function handleAddActivity() {
     if (!validateInput(type, duration, date)) return;
     const isSpecial = (type === 'Running' || type === 'Weights') && parseInt(duration, 10) > 60;
-  
+
     try {
       const docRef = await addDoc(collection(db, "Activities"), {
         type,
         duration: parseInt(duration, 10),
-        date: formatDate(date),
+        date: date,
         // we don't need to manually generate unique IDs here. Firebase will automatically geneate unique IDs
         isSpecial,
       });
@@ -120,8 +120,6 @@ export default function AddActivity({ navigation }) {
       setDate(selectedDate); // update the state with the new date
     }
   }
-
-
 
   // format date to a readable string year-month-day
   function formatDate(date) {
