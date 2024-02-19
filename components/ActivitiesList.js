@@ -1,33 +1,48 @@
 import { StyleSheet, Text, View, FlatList } from 'react-native';
-import React from 'react';
-import { ActivitiesContext } from '../context/ActivitiesProvider';
-import { useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import Activity from './Activity';
+import { db } from '../configuration/FirebaseConfig';
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
 
 /*
- * this file renders a list of activities within the app
- * and use the useContext hook to access activities from the ActivitiesContext.
- * 
+ * this file fetches data from Firestore database, and renders a list of activities within the app
  * it optionally filter activities to show only special ones based on the `showSpecialOnly` prop.
  * 
 */
 
 export default function ActivitiesList({ showSpecialOnly }) {
 
-  const { activities } = useContext(ActivitiesContext);
+  const [activities, setActivities] = useState([]);
 
-  // console.log(activities);
+  // When (1) the component ActivitiesList mounts or (2) navigating from AllActivities to SpecialActivities or vice versa,
+  // useEffect is called or re-run
+  useEffect(() => {
+    let q; // q represents a query object 
+    if (showSpecialOnly) {
+      q = query(collection(db, "Activities"), where("isSpecial", "==", true));
+    } else {
+      q = query(collection(db, "Activities"));
+    }
+    // console.log(q);
 
-  // Filter activities based on the `showSpecialOnly` prop and `isSpecial` attribute
-  const filteredActivities = showSpecialOnly
-    ? activities.filter(activity => activity.isSpecial)
-    : activities;
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const activitiesArray = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setActivities(activitiesArray);
+    });
+
+    // stop listening to updates when the component unmounts or before the effect re-runs
+    return () => unsubscribe(); 
+  }, [showSpecialOnly]);
+
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={filteredActivities}
-        renderItem={({ item }) => <Activity item={item}/>}
+        data={activities}
+        renderItem={({ item }) => <Activity item={item} />}
         keyExtractor={item => item.id}
       />
     </View>
