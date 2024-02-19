@@ -28,17 +28,20 @@ export default function ActivitiesList({ showSpecialOnly }) {
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const activitiesArray = querySnapshot.docs
-      .map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-      }))
-      // since 'date' is stored as a Timestamp object in Firestore, we can sort in ascending order
-      .sort((a, b) => a.date.seconds - b.date.seconds);
+        .map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+          // convert Timestamp to a JavaScript Date object for sorting
+          // createdAt: doc.data().createdAt.toDate(),
+        }))
+        // since 'date' is stored as a Timestamp object in Firestore, we can sort in ascending order
+        .sort((a, b) => a.date.seconds - b.date.seconds);
+        // .sort((a, b) => b.createdAt - a.createdAt);
       setActivities(activitiesArray);
     });
 
     // stop listening to updates when the component unmounts or before the effect re-runs
-    return () => unsubscribe(); 
+    return () => unsubscribe();
   }, [showSpecialOnly]);
 
 
