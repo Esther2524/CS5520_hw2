@@ -6,7 +6,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { Colors, fontSize, Padding } from '../Theme';
 import Button from '../components/Button';
 import { db } from '../configuration/FirebaseConfig';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import PressableButton from '../components/PressableButton';
 
 const items = [
   { label: 'Walking', value: 'Walking' },
@@ -71,6 +72,8 @@ export default function AddActivity({ navigation }) {
         date: date,
         // we don't need to manually generate unique IDs here. Firebase will automatically geneate unique IDs
         isSpecial,
+        // add a server-side timestamp for display activities based on creation time later on
+        // createdAt: serverTimestamp(),
       });
       console.log("Document written with ID: ", docRef.id); // access the auto-generated ID by Firestore
       navigation.goBack(); // go back to previous screen
@@ -182,18 +185,21 @@ export default function AddActivity({ navigation }) {
 
         {!showDatePicker && (
           <View style={styles.buttonContainer}>
-            <Button
+
+            <PressableButton
               onPress={handleCancel}
-              title='Cancel'
-              disabled={false}
-              textColor={Colors.cancelButton}
-            />
-            <Button
+              customStyle={styles.cancelButton}
+            >
+              <Text style={styles.buttonTitle}>Cancel</Text>
+            </PressableButton>
+
+            <PressableButton
               onPress={handleAddActivity}
-              title='Save'
-              disabled={false}
-              textColor={Colors.saveButton}
-            />
+              customStyle={styles.saveButton}
+            >
+              <Text style={styles.buttonTitle}>Save</Text>
+            </PressableButton>
+            
           </View>
         )}
       </View>
@@ -252,6 +258,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     marginTop: 30,
+  },
+  cancelButton: {
+    backgroundColor: Colors.cancelButton,
+    paddingVertical: 10,
+    width: '40%',
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  saveButton: {
+    backgroundColor: Colors.saveButton,
+    paddingVertical: 10,
+    width: '40%',
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  buttonTitle: {
+    fontSize: fontSize.buttonText,
+    color: Colors.buttonTitle,
   },
 
 })
