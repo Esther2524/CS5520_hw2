@@ -5,7 +5,6 @@ import { AntDesign } from '@expo/vector-icons';
 import AllActivities from '../screens/AllActivities';
 import SpecialActivities from '../screens/SpecialActivities';
 import { Colors } from '../Theme';
-import Button from '../components/Button';
 import PressableButton from '../components/PressableButton';
 
 /*
@@ -45,6 +44,8 @@ export default function TabNavigator({ navigation }) {
     // add a universal headerRight button for both tabs
     headerRight: () => (
       <PressableButton
+        // I do not need to explicitly pass { activityData: null }. 
+        // If I don't provide the activityData parameter, it will be undefined by default in the route.params of the AddActivity component. 
         onPress={() => navigation.navigate('AddActivities')}
         customStyle={{ marginRight: 20, }}
       >
