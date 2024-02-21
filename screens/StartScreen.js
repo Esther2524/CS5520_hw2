@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View, TextInput } from 'react-native';
 import React, { useState } from 'react';
 import { Colors, fontSize, Padding } from '../Theme';
-import Button from '../components/Button';
 import PressableButton from '../components/PressableButton';
 
 /*
