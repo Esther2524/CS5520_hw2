@@ -32,9 +32,22 @@ export default function EditActivity({ route, navigation }) {
     fetchActivity();
   }, [itemID]);
 
+  function handleDelete() {
+    Alert.alert(
+      "Delete", // title
+      "Are you sure you want to delete this activity?", // message
+      // button (array)
+      [
+        {text: "No"},
+        // note that, it is NOT `() => {deleteActivity}`
+        {text: "Yes", onPress: () => deleteActivity()}
+      ]
+    );
+  }
 
 
-  async function handleDelete() {
+
+  async function deleteActivity() {
     try {
       await deleteDoc(doc(db, 'Activities', itemID));
       console.log("Deleted document with ID", itemID);
