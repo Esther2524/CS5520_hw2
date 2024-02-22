@@ -125,9 +125,14 @@ export default function AddActivity({ activityData, navigation, isFromEdit, item
     // console.log("edit data with id", itemID);
 
     // determine the new value of isSpecial based on the original value and isSelect
-    // if an activity's isSpecial is false, then it will always be false
+    // if an activity's isSpecial is false, then its new isSpecial will depends on the type and duration
     // but if an activity's isSpecial is true, then it can be true or false, depending on the state of checkbox
-    const newIsSpecial = activityData.isSpecial ? !isSelect : false;
+    let newIsSpecial;
+    if (activityData.isSpecial) {
+      newIsSpecial = !isSelect;
+    } else {
+      newIsSpecial = (type === 'Running' || type === 'Weights') && parseInt(duration, 10) > 60;
+    }
 
     try {
       // create a reference to the document with this itemID
