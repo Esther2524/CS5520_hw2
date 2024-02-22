@@ -1,13 +1,13 @@
 import { StyleSheet, Text, View, TextInput, Platform, Alert } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import DropdownPicker from 'react-native-dropdown-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Colors, fontSize, Padding } from '../Theme';
-import Button from '../components/Button';
 import { db } from '../configuration/FirebaseConfig';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, updateDoc, serverTimestamp, doc } from 'firebase/firestore';
 import PressableButton from '../components/PressableButton';
+import CheckBox from '../components/CheckBox';
 
 const items = [
   { label: 'Walking', value: 'Walking' },
@@ -20,17 +20,39 @@ const items = [
 ];
 
 
-export default function AddActivity({ navigation }) {
+export default function AddActivity({ activityData, navigation, isFromEdit, itemID }) {
 
   // open is a boolean state that controls whether the dropdown is open or closed.
   const [open, setOpen] = useState(false);
   // set date picker
   const [showDatePicker, setShowDatePicker] = useState(false);
-  // the attributes of an activity
+
+  // for Adding: the attributes of an activity
   const [type, setType] = useState(null);
   const [duration, setDuration] = useState('');
   const [date, setDate] = useState(null);
 
+  // for Editing: populate data from this specific item
+  const [isSelect, setIsSelect] = useState(false);
+
+
+  console.log("Data Passed to Edit Screen:", activityData);
+  // console.log("is from edit screen?", isFromEdit);
+
+
+  useEffect(() => {
+    if (isFromEdit && activityData) {
+      populateData();
+    }
+  }, [isFromEdit, activityData]); // depend on isFromEdit and activityData
+
+
+  function populateData() {
+    setType(activityData.type);
+    setDuration(activityData.duration.toString());
+    setDate(new Date(activityData.date.seconds * 1000)); // convert timestamp to normal date format
+
+  };
 
   function validateInput(type, duration, date) {
     let errorMessage = '';
@@ -82,12 +104,34 @@ export default function AddActivity({ navigation }) {
     }
   };
 
+  async function handleEditActivity() {
+    console.log("edit data with id", itemID);
+    if (!validateInput(type, duration, date)) return;
+
+    try {
+      // create a reference to the document with this itemID
+      const activityRef = doc(db, "Activities", itemID);
+
+      await updateDoc(activityRef, {
+        type,
+        duration: parseInt(duration, 10),
+        date: date,
+      });
+      console.log("Activity updated with ID: ", itemID);
+      navigation.goBack(); // go back to the previous screen after editing the current activity
+    } catch (error) {
+      console.error("Error updating document: ", error);
+      Alert.alert("Error", "Could not update the activity");
+    }
+
+  }
+
 
 
   // return to the previous screen
   function handleCancel() {
     navigation.goBack();
-  }
+  };
 
 
 
@@ -136,11 +180,12 @@ export default function AddActivity({ navigation }) {
 
 
 
+
+
   return (
     <View style={styles.container}>
+      {/* we can't use this here: {isFromEdit && populateData()}  */}
       <View style={styles.view}>
-        {/* not sure why, but if I put text and DropdownPicker into a dropdownContainer,
-      then the dropdown is not scrollable on Android */}
         <Text style={styles.textActivity}>Activity *</Text>
         <DropdownPicker
           open={open}
@@ -174,7 +219,8 @@ export default function AddActivity({ navigation }) {
           />
           {
             showDatePicker && <DateTimePicker
-              // DateTimePicker requires a valid date for its value prop at all times, but I want the picker not to show a date until the user has chosen one
+              // DateTimePicker requires a valid date for its value prop at all times, 
+              // but I want the picker not to show a date until the user has chosen one
               value={date || new Date()}
               mode='date'
               display='inline'
@@ -182,6 +228,20 @@ export default function AddActivity({ navigation }) {
             />
           }
         </View>
+
+
+        {/* I need to check if activityData is null or undefined
+         * because null.isSpecial will cause errors
+        */}
+        {
+          isFromEdit && activityData && activityData.isSpecial && !showDatePicker &&
+          (<CheckBox
+            isSelected={isSelect}
+            onCheckboxPress={() => { setIsSelect(!isSelect) }}
+            label='This item is marked as special. Select the checkbox if you would like to unmark it as special.'
+          />)
+        }
+
 
         {!showDatePicker && (
           <View style={styles.buttonContainer}>
@@ -193,15 +253,19 @@ export default function AddActivity({ navigation }) {
               <Text style={styles.buttonTitle}>Cancel</Text>
             </PressableButton>
 
+
             <PressableButton
-              onPress={handleAddActivity}
+              onPress={isFromEdit ? handleEditActivity : handleAddActivity}
               customStyle={styles.saveButton}
             >
               <Text style={styles.buttonTitle}>Save</Text>
             </PressableButton>
-            
+
           </View>
         )}
+
+
+
       </View>
     </View>
   )
@@ -252,12 +316,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.dropdownBackground,
   },
   dateContainer: {
-    marginBottom: 30,
+    marginBottom: 20,
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    marginTop: 30,
+    marginTop: 20,
   },
   cancelButton: {
     backgroundColor: Colors.cancelButton,
@@ -270,12 +334,13 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.saveButton,
     paddingVertical: 10,
     width: '40%',
-    borderRadius: 10,
+    borderRadius: 13,
     alignItems: 'center',
   },
   buttonTitle: {
     fontSize: fontSize.buttonText,
     color: Colors.buttonTitle,
+    fontWeight: 'bold',
   },
 
 })
