@@ -47,13 +47,14 @@ export default function AddActivity({ activityData, navigation, isFromEdit, item
   }, [isFromEdit, activityData]); // depend on isFromEdit and activityData
 
 
+  // for Editing a existing activity
   function populateData() {
     setType(activityData.type);
     setDuration(activityData.duration.toString());
     setDate(new Date(activityData.date.seconds * 1000)); // convert timestamp to normal date format
-
   };
 
+  // For Adding a new activity
   function validateInput(type, duration, date) {
     let errorMessage = '';
     // check if the activity type is selected
@@ -104,9 +105,15 @@ export default function AddActivity({ activityData, navigation, isFromEdit, item
     }
   };
 
+
   async function handleEditActivity() {
     console.log("edit data with id", itemID);
     if (!validateInput(type, duration, date)) return;
+
+    // determine the new value of isSpecial based on the original value and isSelect
+    // if an activity's isSpecial is false, then it will always be false
+    // but if an activity's isSpecial is true, then it can be true or false, depending on the state of checkbox
+    const newIsSpecial = activityData.isSpecial ? !isSelect : false;
 
     try {
       // create a reference to the document with this itemID
@@ -116,6 +123,7 @@ export default function AddActivity({ activityData, navigation, isFromEdit, item
         type,
         duration: parseInt(duration, 10),
         date: date,
+        isSpecial: newIsSpecial,
       });
       console.log("Activity updated with ID: ", itemID);
       navigation.goBack(); // go back to the previous screen after editing the current activity

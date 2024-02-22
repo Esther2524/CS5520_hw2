@@ -1,8 +1,12 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Alert, Button } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import AddActivity from './AddActivity';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../configuration/FirebaseConfig';
+import PressableButton from '../components/PressableButton';
+import { AntDesign } from '@expo/vector-icons';
+import { Colors, fontSize, Padding } from '../Theme';
+
 
 export default function EditActivity({ route, navigation }) {
 
@@ -28,12 +32,42 @@ export default function EditActivity({ route, navigation }) {
     fetchActivity();
   }, [itemID]);
 
+
+
+  async function handleDelete() {
+    try {
+      await deleteDoc(doc(db, 'Activities', itemID));
+      console.log("Deleted document with ID", itemID);
+      navigation.goBack();
+    } catch (e) {
+      console.error("Error deleting document: ", e);
+    }
+  }
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => {
+        return (
+          <PressableButton
+            onPress={handleDelete}
+            customStyle={{ marginRight: 20, }}
+          >
+            <AntDesign name="delete" size={22} color={Colors.deleteButton} />
+          </PressableButton>
+        )
+      }
+    })
+  }, [navigation, itemID]);
+
+
+
+
   return (
-    <AddActivity 
-    activityData={activityData} 
-    navigation={navigation} 
-    isFromEdit={true}
-    itemID={itemID}/>
+    <AddActivity
+      activityData={activityData}
+      navigation={navigation}
+      isFromEdit={true}
+      itemID={itemID} />
   )
 }
 
