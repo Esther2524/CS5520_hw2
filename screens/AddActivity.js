@@ -36,7 +36,7 @@ export default function AddActivity({ activityData, navigation, isFromEdit, item
   const [isSelect, setIsSelect] = useState(false);
 
 
-  console.log("Data Passed to Edit Screen:", activityData);
+  // console.log("Data Passed to Edit Screen:", activityData);
   // console.log("is from edit screen?", isFromEdit);
 
 
@@ -106,9 +106,23 @@ export default function AddActivity({ activityData, navigation, isFromEdit, item
   };
 
 
-  async function handleEditActivity() {
-    console.log("edit data with id", itemID);
+
+  function handleEditActivity() {
     if (!validateInput(type, duration, date)) return;
+
+    Alert.alert(
+      "Important",
+      "Are you sure you want to save these changes?",
+      [
+        { text: "No" },
+        { text: "Yes", onPress: () => editActivity() }
+      ]
+    );
+  }
+
+
+  async function editActivity() {
+    // console.log("edit data with id", itemID);
 
     // determine the new value of isSpecial based on the original value and isSelect
     // if an activity's isSpecial is false, then it will always be false
