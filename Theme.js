@@ -44,5 +44,7 @@ export const Padding = {
     inputPadding: 8,
     textInputPadding: 10,
     checkBoxPadding: 5,
+    buttonDefaultPadding: 1,
+    buttonPadding: 8,
 }
 

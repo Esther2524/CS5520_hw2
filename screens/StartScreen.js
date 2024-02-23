@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   button: {
-    padding: 8,
+    padding: Padding.buttonPadding,
   },
   resetButton: {
     fontSize: fontSize.inputText,
