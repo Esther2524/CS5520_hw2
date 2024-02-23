@@ -30,10 +30,12 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    width: '91%',
   },
   checkboxContainer: {
     marginTop: Padding.checkBoxPadding,
-    marginRight: 13,
+    marginRight: 10,
+    marginLeft: 10,
   },
   label: {
     fontSize: fontSize.checkBox,
