@@ -148,6 +148,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', // align buttons in a row
     justifyContent: 'space-evenly',
     width: '100%',
+    marginTop: 10,
   },
   button: {
     padding: 8,
