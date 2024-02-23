@@ -1,18 +1,26 @@
 import { Pressable, StyleSheet } from "react-native";
 import React from "react";
+import { Colors, fontSize, Padding } from '../Theme';
 
 // Using children allows us to pass any React element (e.g., text, icons) 
 // to the button, making the component more versatile. 
-export default function PressableButton({ onPress, customStyle, children }) {
+export default function PressableButton({ onPress, customStyle, children, disabled = false }) {
   return (
     <Pressable
-      onPress={onPress}
+      // when the button is disabled, we should prevent the onPress event from firing
+      onPress={() => {
+        if (!disabled) {
+          onPress();
+        }
+      }}
+      // android_ripple={{ color: 'rgba(0, 0, 0, .32)', borderless: false }} // apply the ripple effect for Android
       style={({ pressed }) => [
         styles.defaultStyle,
         customStyle,
         // if pressed
         pressed && styles.pressed,
       ]}
+      disabled={disabled}
     >
       {children}
     </Pressable>
@@ -21,7 +29,7 @@ export default function PressableButton({ onPress, customStyle, children }) {
 
 const styles = StyleSheet.create({
   defaultStyle: {
-    // alignItems: 'center',
+    padding: Padding.buttonDefaultPadding,
   },
   pressed: {
     // an opacity value of 0.5 reduces the visibility of the component to half, making it semi-transparent
