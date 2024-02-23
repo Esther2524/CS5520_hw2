@@ -252,40 +252,46 @@ export default function AddActivity({ activityData, navigation, isFromEdit, item
           }
         </View>
 
+        <View style={styles.bottomView}>
 
-        {/* I need to check if activityData is null or undefined
-         * because null.isSpecial will cause errors
-        */}
-        {
-          isFromEdit && activityData && activityData.isSpecial && !showDatePicker &&
-          (<CheckBox
-            isSelected={isSelect}
-            onCheckboxPress={() => { setIsSelect(!isSelect) }}
-            label='This item is marked as special. Select the checkbox if you would like to unmark it as special.'
-          />)
-        }
-
-
-        {!showDatePicker && (
-          <View style={styles.buttonContainer}>
-
-            <PressableButton
-              onPress={handleCancel}
-              customStyle={styles.cancelButton}
-            >
-              <Text style={styles.buttonTitle}>Cancel</Text>
-            </PressableButton>
-
-
-            <PressableButton
-              onPress={isFromEdit ? handleEditActivity : handleAddActivity}
-              customStyle={styles.saveButton}
-            >
-              <Text style={styles.buttonTitle}>Save</Text>
-            </PressableButton>
+          <View style={styles.chechboxContainer}>
+            {/* I need to check if activityData is null or undefined
+              because null.isSpecial will cause errors */}
+            {
+              isFromEdit && activityData && activityData.isSpecial && !showDatePicker &&
+              (<CheckBox
+                isSelected={isSelect}
+                onCheckboxPress={() => { setIsSelect(!isSelect) }}
+                label='This item is marked as special. Select the checkbox if you would like to unmark it as special.'
+              />)
+            }
 
           </View>
-        )}
+
+
+
+          {!showDatePicker && (
+            <View style={styles.buttonContainer}>
+
+              <PressableButton
+                onPress={handleCancel}
+                customStyle={styles.cancelButton}
+              >
+                <Text style={styles.buttonTitle}>Cancel</Text>
+              </PressableButton>
+
+
+              <PressableButton
+                onPress={isFromEdit ? handleEditActivity : handleAddActivity}
+                customStyle={styles.saveButton}
+              >
+                <Text style={styles.buttonTitle}>Save</Text>
+              </PressableButton>
+
+            </View>
+          )}
+
+        </View>
 
 
 
@@ -339,12 +345,18 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.dropdownBackground,
   },
   dateContainer: {
+    marginBottom: 200,
+  },
+  bottomView: {
+    marginTop: 100,
+  },
+  chechboxContainer: {
     marginBottom: 20,
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    marginTop: 20,
+    // marginTop: 200,
   },
   cancelButton: {
     backgroundColor: Colors.cancelButton,
