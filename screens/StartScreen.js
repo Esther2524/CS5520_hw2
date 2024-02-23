@@ -98,6 +98,7 @@ export default function StartScreen({ navigation }) {
 
         <PressableButton
           onPress={handleStart}
+          disabled={!email && !phoneNumber} // return false when either email or phoneNum is provided
           customStyle={styles.button}
         >
           <Text style={(email || phoneNumber) ?
