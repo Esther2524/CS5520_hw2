@@ -344,7 +344,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.dropdownBackground,
   },
   dateContainer: {
-    marginBottom: 200,
+    marginBottom: 150,
   },
   bottomView: {
     marginTop: 100,
