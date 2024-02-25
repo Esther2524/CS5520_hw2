@@ -13,7 +13,7 @@ export default function PressableButton({ onPress, customStyle, children, disabl
           onPress();
         }
       }}
-      // android_ripple={{ color: 'rgba(0, 0, 0, .32)', borderless: false }} // apply the ripple effect for Android
+      android_ripple={{color: 'lightgrey', borderless: false}} // apply the ripple effect for Android
       style={({ pressed }) => [
         styles.defaultStyle,
         customStyle,
