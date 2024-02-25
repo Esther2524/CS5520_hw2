@@ -10,11 +10,14 @@ import { Colors, fontSize, Padding } from '../Theme';
 
 export default function EditActivity({ route, navigation }) {
 
+  // extract itemID from navigation params to identify the activity to be edited
   const { itemID } = route.params;
 
   const [activityData, setActivityData] = useState(null);
 
+  // fetch activity data on component mount or when itemID changes
   useEffect(() => {
+
     async function fetchActivity() {
       const docRef = doc(db, 'Activities', itemID);
       try {
@@ -29,8 +32,10 @@ export default function EditActivity({ route, navigation }) {
         console.error("Error fetching document:", error);
       }
     }
+
     fetchActivity();
   }, [itemID]);
+
 
   function handleDelete() {
     Alert.alert(
@@ -38,9 +43,9 @@ export default function EditActivity({ route, navigation }) {
       "Are you sure you want to delete this activity?", // message
       // button (array)
       [
-        {text: "No"},
+        { text: "No" },
         // note that, it is NOT `() => {deleteActivity}`
-        {text: "Yes", onPress: () => deleteActivity()}
+        { text: "Yes", onPress: () => deleteActivity() } // button to confirm deletion
       ]
     );
   }
@@ -51,7 +56,7 @@ export default function EditActivity({ route, navigation }) {
     try {
       await deleteDoc(doc(db, 'Activities', itemID));
       console.log("Deleted document with ID", itemID);
-      navigation.goBack();
+      navigation.goBack(); // navigate back to the previous screen
     } catch (e) {
       console.error("Error deleting document: ", e);
     }

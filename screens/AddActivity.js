@@ -54,6 +54,7 @@ export default function AddActivity({ activityData, navigation, isFromEdit, item
     setDate(new Date(activityData.date.seconds * 1000)); // convert timestamp to normal date format
   };
 
+
   // For Adding a new activity
   function validateInput(type, duration, date) {
     let errorMessage = '';
@@ -95,8 +96,6 @@ export default function AddActivity({ activityData, navigation, isFromEdit, item
         date: date,
         // we don't need to manually generate unique IDs here. Firebase will automatically geneate unique IDs
         isSpecial,
-        // add a server-side timestamp for display activities based on creation time later on
-        // createdAt: serverTimestamp(),
       });
       console.log("Document written with ID: ", docRef.id); // access the auto-generated ID by Firestore
       navigation.goBack(); // go back to previous screen
@@ -115,7 +114,7 @@ export default function AddActivity({ activityData, navigation, isFromEdit, item
       "Are you sure you want to save these changes?",
       [
         { text: "No" },
-        { text: "Yes", onPress: () => editActivity() }
+        { text: "Yes", onPress: () => editActivity() } // button to confirm editing
       ]
     );
   }
