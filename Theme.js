@@ -8,6 +8,7 @@ export const Colors = {
     saveButton: '#436850',
     buttonTitle: 'white',
     disabledButton: '#E3E1D9',
+    androidRipple: 'lightgrey',
     shadow: '#333',
     errorMessage: '#12372A',
     header: '#E1F0DA',
