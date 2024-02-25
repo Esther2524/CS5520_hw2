@@ -23,7 +23,7 @@ export default function StackNavigator() {
         screenOptions={{
           headerStyle: { backgroundColor: Colors.headerBackground }, // global header style
           headerTintColor: Colors.header,
-          headerTitleAlign: 'center', // center align the header title for Android
+          // headerTitleAlign: 'center', // center align the header title for Android
         }}>
 
         <Stack.Screen
