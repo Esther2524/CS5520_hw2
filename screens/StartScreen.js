@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, TextInput } from 'react-native';
 import React, { useState } from 'react';
 import { Colors, fontSize, Padding } from '../Theme';
-import Button from '../components/Button';
+import PressableButton from '../components/PressableButton';
 
 /*
  * The StartScreen component consists of two main TextInput fields, 
@@ -26,7 +26,7 @@ export default function StartScreen({ navigation }) {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
     return regex.test(email);
   }
-  
+
   function validatePhoneNumber(phoneNumber) {
     return /^\d{10}$/.test(phoneNumber);
   }
@@ -88,18 +88,24 @@ export default function StartScreen({ navigation }) {
       </View>
 
       <View style={styles.buttonContainer}>
-        <Button
-          style={styles.button}
-          title='Reset'
+
+        <PressableButton
           onPress={handleReset}
-          disabled={false}
-          textColor={Colors.resetButton} />
-        <Button
-          style={styles.button}
-          title='Start'
+          customStyle={styles.button}
+        >
+          <Text style={styles.resetButton}>Reset</Text>
+        </PressableButton>
+
+        <PressableButton
           onPress={handleStart}
-          disabled={!email && !phoneNumber}
-          textColor={Colors.startButton} />
+          disabled={!email && !phoneNumber} // return false when either email or phoneNum is provided
+          customStyle={styles.button}
+        >
+          <Text style={(email || phoneNumber) ?
+            styles.startButton : styles.initialStartButton}>
+            Start</Text>
+        </PressableButton>
+
       </View>
 
     </View>
@@ -114,7 +120,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   inputContainer: {
-    marginBottom: 30,
+    marginBottom: 20,
     width: '95%',
     height: 80,
   },
@@ -142,8 +148,26 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row', // align buttons in a row
     justifyContent: 'space-evenly',
-    marginTop: 10,
     width: '100%',
+    marginTop: 10,
   },
+  button: {
+    padding: Padding.buttonPadding,
+  },
+  resetButton: {
+    fontSize: fontSize.inputText,
+    fontWeight: 'bold',
+    color: Colors.resetButton,
+  },
+  startButton: {
+    fontSize: fontSize.inputText,
+    fontWeight: 'bold',
+    color: Colors.startButton,
+  },
+  initialStartButton: {
+    fontSize: fontSize.inputText,
+    fontWeight: 'bold',
+    color: Colors.initialStartButton,
+  }
 
 })

@@ -2,6 +2,8 @@ import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { Colors, fontSize, Padding } from '../Theme';
 import { AntDesign } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import PressableButton from './PressableButton';
 
 /*
  * it renders the visual representation of an individual activity item, 
@@ -9,24 +11,49 @@ import { AntDesign } from '@expo/vector-icons';
 */
 
 export default function Activity({ item }) {
+
+  // using the useNavigation hook from @react-navigation/native 
+  // if the parent component is part of the navigation stack,
+  // then Activity component has access to the navigation prop
+  const navigation = useNavigation();
+
+
+  // convert the Firestore timestamp to a JavaScript Date object
+  function formatDate(timestamp) {
+    const date = new Date(timestamp.seconds * 1000); // multiply by 1000 to convert seconds to milliseconds
+    const weekday = date.toLocaleString('en-US', { weekday: 'short' });
+    const month = date.toLocaleString('en-US', { month: 'short' });
+    const day = date.toLocaleString('en-US', { day: 'numeric' });
+    const year = date.toLocaleString('en-US', { year: 'numeric' });
+    return `${weekday} ${month} ${day} ${year}`;
+  }
+
+
+  // console.log(item.date) // date is a Firestore Timestamp
+
   return (
-    <View style={styles.activityContainer}>
-      <View style={styles.typeContainer}>
-        <Text style={styles.typeText}>{item.type}</Text>
-      </View>
-      <View style={styles.iconAndTextContainer}>
-        {item.isSpecial ? (
-          <AntDesign style={styles.icon} name={'star'} size={22} color={Colors.activeTab} />
-        ) : (
-          // placeholder view when there is no icon
-          <View style={[styles.icon, { width: 22, height: 22 }]} />
-        )}
-        <View style={styles.textContainer}>
-          <Text style={styles.dateText}>{item.date}</Text>
-          <Text style={styles.durationText}>{item.duration} min</Text>
+    <PressableButton
+      // the navigation occurs only when the PressableButton is pressed
+      onPress={() => navigation.navigate('EditActivity', { itemID: item.id })}
+    >
+      <View style={styles.activityContainer}>
+        <View style={styles.typeContainer}>
+          <Text style={styles.typeText}>{item.type}</Text>
+        </View>
+        <View style={styles.iconAndTextContainer}>
+          {item.isSpecial ? (
+            <AntDesign style={styles.icon} name={'star'} size={22} color={Colors.activeTab} />
+          ) : (
+            // placeholder view when there is no icon
+            <View style={[styles.icon, { width: 22, height: 22 }]} />
+          )}
+          <View style={styles.textContainer}>
+            <Text style={styles.dateText}>{formatDate(item.date)}</Text>
+            <Text style={styles.durationText}>{item.duration} min</Text>
+          </View>
         </View>
       </View>
-    </View>
+    </PressableButton>
   )
 }
 
